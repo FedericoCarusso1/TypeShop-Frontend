@@ -2,6 +2,12 @@ import { useState } from "react";
 import { Carousel } from "react-bootstrap";
 import ImageLazy from "./UI/lazy-image";
 
+const images = [
+  "/images/carousels/1.jpg",
+  "/images/carousels/2.webp",
+  "/images/carousels/3.webp",
+];
+
 const Carousels = () => {
   const [index, setIndex] = useState(0);
 
@@ -10,28 +16,16 @@ const Carousels = () => {
   };
 
   return (
-    <Carousel activeIndex={index} onSelect={handleSelect}>
-      <Carousel.Item className="carsouel__item">
-        <ImageLazy
-          className="lazy-carousel"
-          style={{ width: "1600px" }}
-          imageUrl="https://cdn.shopify.com/s/files/1/2301/4381/files/MSI_BANNER_1080x.jpg?v=1641895460"
-        />
-      </Carousel.Item>
-      <Carousel.Item className="carsouel__item">
-        <ImageLazy
-          className="lazy-carousel"
-          style={{ width: "1600px" }}
-          imageUrl="/images/p2.jpg"
-        />
-      </Carousel.Item>
-      <Carousel.Item className="carsouel__item">
-        <ImageLazy
-          style={{ width: "1600px" }}
-          className="lazy-carousel"
-          imageUrl="https://www.sammobile.com/wp-content/uploads/2020/01/galaxy-s20-wallpaper-note-10.jpg"
-        />
-      </Carousel.Item>
+    <Carousel
+      activeIndex={index}
+      onSelect={handleSelect}
+      className="w-100 d-flex justify-content-center"
+    >
+      {images.map((url, idx) => (
+        <Carousel.Item key={idx} className="carousel__item">
+          <ImageLazy className="carousel__image w-100" imageUrl={url} />
+        </Carousel.Item>
+      ))}
     </Carousel>
   );
 };

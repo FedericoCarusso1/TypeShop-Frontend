@@ -87,10 +87,24 @@ section {
   width: 120px;
 }
 
+.carousel__item {
+  overflow: hidden;
+}
+
+.carousel__image {
+  object-fit: cover;
+  height: 700px;
+  width: 100vw;
+}
+
 @media (max-height: 760px) {
   .brand-img {
     height: 40px;
     width: 80px;
+  }
+  .carousel__image {
+    height: 400px !important;
+    width: 100vw;
   }
 }
 
@@ -99,7 +113,6 @@ section {
   opacity: 1;
 }
 
-/* Carousel Brand */
 .tempaltemo-carousel .h1 {
   font-size: 0.5em !important;
   color: #000 !important;

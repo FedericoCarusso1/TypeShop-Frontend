@@ -16,7 +16,7 @@ type FormValues = {
 const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { userInfo } = useAppSelector((state) => state.login);
+  const { userInfo, loading } = useAppSelector((state) => state.login);
   const validationSchema = Yup.object().shape({
     email: Yup.string().required("Email is required").email("Email is invalid"),
     password: Yup.string()
@@ -78,11 +78,12 @@ const Login = () => {
 
         <Button
           type="submit"
+          disabled={loading}
           className="mt-4 w-full"
           style={{ backgroundColor: "#e03a3c", color: "#fff" }}
           variant="outline-none"
         >
-          Submit
+          {loading ? "Loading..." : "Login"}
         </Button>
       </Form>
     </FormContainer>

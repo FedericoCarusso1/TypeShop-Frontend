@@ -1,7 +1,7 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import toast from 'react-hot-toast';
-import { setError } from '../../utils/error';
-import publicAxios from '../../utils/public-axios';
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
+import { setError } from "../../utils/error";
+import publicAxios from "../../utils/public-axios";
 
 type User = {
   email: string;
@@ -29,10 +29,10 @@ const initialState: UserSliceState = {
 };
 
 export const userLogin = createAsyncThunk(
-  'users/login',
+  "users/login",
   async (user: User, thunkAPI) => {
     try {
-      const res = await publicAxios.post('/users/login', user);
+      const res = await publicAxios.post("/users/login", user);
       if (res.data) {
         toast.success(`Bienvenue 👏 ${res.data.name}`);
         return res.data;
@@ -46,7 +46,7 @@ export const userLogin = createAsyncThunk(
 );
 
 export const loginSlice = createSlice({
-  name: 'auth-login',
+  name: "auth-login",
   initialState,
   reducers: {
     userLogout: (state: UserSliceState) => {
@@ -55,7 +55,6 @@ export const loginSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(userLogin.pending, (state) => {
-      // Add user to the state array
       state.loading = true;
     });
     builder.addCase(userLogin.fulfilled, (state, action) => {
