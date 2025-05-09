@@ -1,6 +1,7 @@
 import { Col, Container, Image, Row } from 'react-bootstrap';
 import toast from 'react-hot-toast';
 import './footer.css';
+import logo from '../../logo.png';
 
 const DownFooter = () => {
   return (
@@ -8,48 +9,50 @@ const DownFooter = () => {
       <div className='footer-top'>
         <Container>
           <Row>
-            <Col lg={3} md={6} xs={12} className=' footer-contact'>
+            <Col lg={3} md={6} xs={12} className='footer-contact'>
               <h3>
-                <Image width={100} src='/LogoMakr-4g0P6C.png' alt='' />
+                <Image width={100} src={logo} alt='' />
               </h3>
               <p>
-                2 Allée Andersen
+                A real city
                 <br />
-                69780 Mions Lyon
+                A real stret 999
                 <br />
-                France
+                World
                 <br />
                 <br />
-                <strong>Phone:</strong> 06 76 56 48 93
+                <strong>Phone:</strong> 1128661345
                 <br />
-                <strong>Email:</strong> typeshop@me.com
+                <strong>Email:</strong> developer.basilorien@gmail.com
                 <br />
+                <br />
+                <i>"D'oh!" - Homer Simpson</i>
               </p>
             </Col>
-            <Col lg={2} md={6} xs={6} className=' footer-links'>
-              <h4>Useful Links</h4>
+            <Col lg={2} md={6} xs={6} className='footer-links'>
+              <h4 className="text-primary">Useful Links</h4>
               <ul>
                 <li>
                   <i className='bx bx-chevron-right' /> <a href='#'>Home</a>
                 </li>
                 <li>
-                  <i className='bx bx-chevron-right' /> <a href='#'>About us</a>
+                  <i className='bx bx-chevron-right' /> <a href='#'>About Us</a>
                 </li>
                 <li>
                   <i className='bx bx-chevron-right' /> <a href='#'>Services</a>
                 </li>
                 <li>
                   <i className='bx bx-chevron-right' />{' '}
-                  <a href='#'>Terms of service</a>
+                  <a href='#'>Terms of Service</a>
                 </li>
                 <li>
                   <i className='bx bx-chevron-right' />{' '}
-                  <a href='#'>Privacy policy</a>
+                  <a href='#'>Privacy Policy</a>
                 </li>
               </ul>
             </Col>
             <Col lg={3} md={6} xs={6} className='footer-links'>
-              <h4>Our Services</h4>
+              <h4 className="text-success">Our Services</h4>
               <ul>
                 <li>
                   <i className='bx bx-chevron-right' />{' '}
@@ -74,12 +77,11 @@ const DownFooter = () => {
               </ul>
             </Col>
             <Col lg={4} md={6} className='footer-newsletter'>
-              <h4>Join Our Newsletter</h4>
+              <h4 className="text-danger">Join Our Newsletter</h4>
               <p>
-                Tamen quem nulla quae legam multos aute sint culpa legam noster
-                magna
+                "I’m not a bad guy! I work hard, and I love my kids. So why should I get such a hard time?" - Homer Simpson
               </p>
-              <form onSubmit={() => toast.success('thanks for yr Subscrition')}>
+              <form onSubmit={() => toast.success('Thanks for your subscription!')}>
                 <input
                   type='email'
                   required

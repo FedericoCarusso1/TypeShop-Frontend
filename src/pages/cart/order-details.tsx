@@ -11,6 +11,7 @@ import authAxios from "../../utils/auth-axios";
 import toast from "react-hot-toast";
 import { setError } from "../../utils/error";
 import ImageLazy from "../../components/UI/lazy-image";
+import logo from '../../logo.png'
 
 const OrderDetails = () => {
   const { order, loading } = useAppSelector((state) => state.orderDetail);
@@ -134,7 +135,7 @@ const OrderDetails = () => {
                             order?.totalPrice
                           )}`}
                           name="Type Shop"
-                          image="/LogoMakr-6Tit9e.png"
+                          image={logo}
                           stripeKey={import.meta.env.VITE_API_STRIPE}
                           token={tokenHandler}
                         />

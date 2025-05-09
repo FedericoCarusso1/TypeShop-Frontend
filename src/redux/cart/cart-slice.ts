@@ -20,12 +20,12 @@ export const cartSlice = createSlice({
     addToCart: (state: CartSliceState, action: PayloadAction<Product>) => {
       const product = action.payload;
       const exist = state.cartItems.find(
-        (item: any) => item._id == product._id
+        (item: any) => item.id == product.id
       );
 
       if (exist) {
         state.cartItems = state.cartItems.map((item: any) =>
-          item._id == product._id ? { ...product, qty: item.qty + 1 } : item
+          item.id == product.id ? { ...product, qty: item.qty + 1 } : item
         );
       } else {
         state.cartItems = [...state.cartItems, { ...product, qty: 1 }];
@@ -34,16 +34,16 @@ export const cartSlice = createSlice({
     removeFromCart: (state: CartSliceState, action: PayloadAction<Product>) => {
       const product = action.payload;
       const exist = state.cartItems.find(
-        (item: any) => item._id == product._id
+        (item: any) => item.id == product.id
       );
 
       if (exist && exist.qty === 1) {
         state.cartItems = state.cartItems.filter(
-          (item: any) => item._id !== product._id
+          (item: any) => item.id !== product.id
         );
       } else {
         state.cartItems = state.cartItems.map((item: any) =>
-          item._id == product._id ? { ...product, qty: item.qty - 1 } : item
+          item.id == product.id ? { ...product, qty: item.qty - 1 } : item
         );
       }
     },
@@ -60,7 +60,6 @@ export const cartSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 export const { addToCart, removeFromCart, saveAddress, reset } =
   cartSlice.actions;
 

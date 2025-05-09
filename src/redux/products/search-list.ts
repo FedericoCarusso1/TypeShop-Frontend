@@ -31,9 +31,10 @@ const initialState: ProductSliceState = {
 export const getFilterProducts = createAsyncThunk(
   'products/filter',
   async (u: any) => {
+    console.log("testign")
     try {
       const { data } = await publicAxios.get(
-        `/products/search?page=${u.n}&brand=${u.b}&category=${u.c}&query=${u.q}`
+        `/products`
       );
       return data;
     } catch (error: any) {
@@ -53,7 +54,7 @@ export const productFilterSlice = createSlice({
     });
     builder.addCase(getFilterProducts.fulfilled, (state, action) => {
       state.loading = false;
-      state.products = action.payload.productDocs;
+      state.products = action.payload;
       state.page = action.payload.page;
       state.pages = action.payload.pages;
       state.brands = action.payload.brands;

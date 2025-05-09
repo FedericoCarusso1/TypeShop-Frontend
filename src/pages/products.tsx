@@ -1,4 +1,3 @@
-//test
 import { useEffect, useState } from "react";
 import {
   Row,
@@ -63,12 +62,12 @@ const Products = () => {
                     }}
                   >
                     <option value="All">All</option>
-                    All
-                    {categories.map((categorie: any) => (
-                      <option value={categorie} key={categorie}>
-                        {categorie}
-                      </option>
-                    ))}
+                    {categories &&
+                      categories.map((categorie: any) => (
+                        <option value={categorie} key={categorie}>
+                          {categorie}
+                        </option>
+                      ))}
                   </FormSelect>
                 </ListGroup.Item>
                 <ListGroup.Item>
@@ -84,12 +83,12 @@ const Products = () => {
                     }}
                   >
                     <option value="All">All</option>
-                    All
-                    {brands.map((brand: any) => (
-                      <option value={brand} key={brand}>
-                        {brand}
-                      </option>
-                    ))}
+                    {brands &&
+                      brands.map((brand: any) => (
+                        <option value={brand} key={brand}>
+                          {brand}
+                        </option>
+                      ))}
                   </FormSelect>
                 </ListGroup.Item>
               </ListGroup>
@@ -110,11 +109,12 @@ const Products = () => {
               </div>
             </Row>
             <Row style={{ minHeight: "80vh" }}>
-              {products.map((product) => (
-                <Col lg={4} md={6} xs={12} key={product._id}>
-                  <ProductCard product={product} />
-                </Col>
-              ))}
+              {products &&
+                products.map((product, index) => (
+                  <Col lg={4} md={6} xs={12} key={product._id || index}>
+                    <ProductCard product={product} />
+                  </Col>
+                ))}
             </Row>
           </Col>
         </Row>

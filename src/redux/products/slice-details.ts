@@ -19,6 +19,7 @@ export const getProductById = createAsyncThunk(
   async (id: string | undefined) => {
     try {
       const res = await publicAxios.get(`/products/${id}`);
+      console.log(res)
       if (res.data) {
         return res.data;
       }
@@ -49,6 +50,5 @@ export const productDetailsSlice = createSlice({
   },
 });
 
-// Action creators are generated for each case reducer function
 
 export default productDetailsSlice;

@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux';
 import { reset } from '../redux/cart/cart-slice';
 import { userLogout } from '../redux/users/login-slice';
+import logo from '../logo.png'
 
 const Header = () => {
   const { userInfo } = useAppSelector((state) => state.login);
@@ -28,16 +29,16 @@ const Header = () => {
               <i className='fa text-sm  fa-envelope mx-2'></i>
               <a
                 className='navbar-sm-brand text-light text-sm text-decoration-none'
-                href='mailto:info@company.com'
+                href='mailto:developer.basilorien@gmail.com'
               >
-                typeshop@me.com
+                developer.basilorien@gmail.com
               </a>
               <i className='fa text-sm  fa-phone mx-2'></i>
               <a
                 className='navbar-sm-brand text-sm  text-light text-decoration-none'
                 href='tel:010-020-0340'
               >
-                06 76 56 48 93
+                1128661345
               </a>
             </div>
             <div>
@@ -86,7 +87,7 @@ const Header = () => {
           {/* Logo */}
           <Navbar.Brand as={NavLink} to='/'>
             <img
-              src='/LogoMakr-6Tit9e.png'
+              src={logo}
               className='avatar rounded me-lg-10'
               alt='...'
             />

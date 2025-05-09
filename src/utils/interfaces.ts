@@ -1,7 +1,7 @@
 import { Product } from '../components/product-card';
 
 export interface Ordertypes {
-  _id: string;
+  id: string;
   user: string;
   shippingAddress: {
     address: string;
@@ -16,7 +16,7 @@ export interface Ordertypes {
 }
 
 export type ReviewTypes = {
-  _id: string;
+  id: string;
   createdAt: Date;
   rating: number;
   comment: string;
@@ -25,7 +25,7 @@ export type ReviewTypes = {
 };
 
 export type User = {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   isAdmin: boolean;

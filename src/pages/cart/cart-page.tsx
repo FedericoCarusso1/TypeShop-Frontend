@@ -108,7 +108,7 @@ const CartPage = () => {
                         className="w-1/2 text-white me-2"
                         variant="outline-none"
                       >
-                        Countine
+                        Continue
                       </Button>
                     </ListGroup.Item>
                   </ListGroup>

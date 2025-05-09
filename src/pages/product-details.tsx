@@ -46,10 +46,12 @@ const ProductDetails = () => {
     const review = {
       comment,
       rating,
+      id
     };
     authAxios
-      .post(`/products/${product?._id}/reviews`, review)
+      .post(`/products/${product?.id}/reviews`, review)
       .then((res) => {
+        console.log(res)
         toast.success("thank you for the comment 🙂");
         setRefresh((prev) => (prev = !prev));
       })
@@ -62,7 +64,7 @@ const ProductDetails = () => {
   }, [id, dispatch, refresh]);
 
   return (
-    <DefaultLayout title={product?.name}>
+    <DefaultLayout title={product?.title}>
       {loading || !product ? (
         <Loader />
       ) : (
@@ -89,7 +91,7 @@ const ProductDetails = () => {
                 className="shadow p-5 bg-white rounded"
               >
                 <ListGroup.Item>
-                  <h2>{product?.name}</h2>
+                  <h2>{product?.title}</h2>
                 </ListGroup.Item>
                 <ListGroup.Item>
                   {" "}
@@ -126,8 +128,8 @@ const ProductDetails = () => {
                 <Card.Body>
                   <h3 style={{ color: "#e03a3c" }}>Reviews</h3>
                   <ListGroup variant="flush">
-                    {product.reviews.map((review) => (
-                      <ListGroup.Item key={review._id}>
+                    {product && product?.reviews?.map((review) => (
+                      <ListGroup.Item key={review.id}>
                         <div className="d-flex">
                           <strong>{review.name}</strong>
                           <Rating value={review.rating} />
