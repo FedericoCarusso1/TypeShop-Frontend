@@ -5,7 +5,7 @@ import authAxios from '../../utils/auth-axios';
 import { setError } from '../../utils/error';
 
 type Ordertypes = {
-  _id: string;
+  id: string;
   user: string;
   shippingAddress: {
     address: string;

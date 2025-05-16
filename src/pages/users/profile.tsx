@@ -32,6 +32,7 @@ const Profile = () => {
   );
 
   const { id } = useParams();
+  console.log(id)
   const [refresh, setRefresh] = useState<boolean>(false);
   const validationSchema = Yup.object().shape({
     name: Yup.string().required(),
@@ -58,7 +59,7 @@ const Profile = () => {
       password: data.password === '' ? null : data.password,
     };
     authAxios
-      .put(`/users/${user?._id}`, update)
+      .put(`/users/${user?.id}`, update)
       .then((res) => {
         toast.success('user has been updated');
         setRefresh((prev) => (prev = !prev));
@@ -86,7 +87,7 @@ const Profile = () => {
   const cols = ['Order id', 'Price', 'Address', 'Paid', 'Date', 'Options'];
 
   return (
-    <DefaultLayout title={`${user?.name} profile`}>
+    <DefaultLayout title={`${user?.name?.firstName} profile`}>
       <Container>
         {loading || !user || orderLoading || !orders ? (
           <Loader />
@@ -167,8 +168,8 @@ const Profile = () => {
             <Col md={7} lg={8}>
               <TableContainer cols={cols}>
                 {orders.map((order) => (
-                  <tr key={order._id}>
-                    <td>{order._id}</td>
+                  <tr key={order.id}>
+                    <td>{order.id}</td>
 
                     <td>{formatCurrencry(order?.totalPrice)}</td>
                     <td>{order?.shippingAddress?.address}</td>
@@ -182,13 +183,13 @@ const Profile = () => {
                     <td>{getDate(order?.createdAt)}</td>
                     <td>
                       <Link
-                        to={`/orders/${order._id}`}
+                        to={`/orders/${order.id}`}
                         className='btn btn-sm btn-secondary  me-2'
                       >
                         <GrView />
                       </Link>
                       <Button
-                        onClick={() => onDelete(order._id)}
+                        onClick={() => onDelete(order.id)}
                         variant='danger'
                         size='sm'
                       >

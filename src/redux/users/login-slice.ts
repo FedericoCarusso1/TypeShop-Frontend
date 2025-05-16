@@ -9,7 +9,7 @@ type User = {
 };
 
 type UserInfo = {
-  _id: string;
+  id: string;
   email: string;
   name: string;
   isAdmin: Boolean;
@@ -32,12 +32,15 @@ export const userLogin = createAsyncThunk(
   "users/login",
   async (user: User, thunkAPI) => {
     try {
-      const res = await publicAxios.post("/users/login", user);
+      console.log(user)
+      const res = await publicAxios.post("/auth/login", { username: user.email, password: user.password });
+      console.log(res)
       if (res.data) {
         toast.success(`Bienvenue 👏 ${res.data.name}`);
         return res.data;
       }
     } catch (error: any) {
+      console.log(error)
       const message = setError(error);
       toast.error(message);
       thunkAPI.rejectWithValue(message);
@@ -58,8 +61,16 @@ export const loginSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(userLogin.fulfilled, (state, action) => {
+      console.log(state, action)
       state.loading = false;
-      state.userInfo = action.payload;
+      // state.userInfo = action.payload;
+      state.userInfo = {
+        id: "1",
+        email: "morrison@gmail.com",
+        isAdmin: false,
+        name: "Federico",
+        createdAt:new Date( "2021-07-14T10:22:35.000Z")
+      }
     });
     builder.addCase(userLogin.rejected, (state) => {
       state.loading = false;

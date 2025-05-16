@@ -60,6 +60,12 @@ const Sidebar = () => {
             </li>
 
             <li className='nav-item '>
+              <Link className='nav-link p-5' to='/dashboard/categories-list'>
+                <HiUsers className='me-2' size={'1.5rem'} /> Categories
+              </Link>
+            </li>
+
+            <li className='nav-item '>
               <Link className='nav-link p-5' to='/dashboard/user-list'>
                 <HiUsers className='me-2' size={'1.5rem'} /> Users
               </Link>

@@ -10,6 +10,7 @@ const AdminProvider = ({ children }: Props) => {
   const { userInfo } = useAppSelector((state) => state.login);
 
   if (userInfo && userInfo.isAdmin) {
+
     return <>{children}</>;
   } else {
     return (

@@ -26,7 +26,7 @@ export type ReviewTypes = {
 
 export type User = {
   id: string;
-  name: string;
+  name: {firstname: string, lastname: string};
   email: string;
   isAdmin: boolean;
   createdAt: Date;

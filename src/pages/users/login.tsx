@@ -18,7 +18,8 @@ const Login = () => {
   const navigate = useNavigate();
   const { userInfo, loading } = useAppSelector((state) => state.login);
   const validationSchema = Yup.object().shape({
-    email: Yup.string().required("Email is required").email("Email is invalid"),
+    email: Yup.string().required("Username or Email is required")
+      .min(4, "Username must be at least 4 characters"),
     password: Yup.string()
       .required("Password is required")
       .min(6, "Password must be at least 6 characters")
@@ -54,7 +55,7 @@ const Login = () => {
           <Form.Label>Email</Form.Label>
 
           <Form.Control
-            type="email"
+            type="username"
             placeholder="Enter email"
             {...register("email")}
             className={errors.email?.message && "is-invalid"}
