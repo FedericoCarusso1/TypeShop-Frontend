@@ -2,8 +2,8 @@ import { Navbar, Nav, NavDropdown } from 'react-bootstrap';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux';
 import { reset } from '../redux/cart/cart-slice';
-import { userLogout } from '../redux/users/login-slice';
 import logo from '../logo.png'
+import { userLogout } from '../redux/users/login-slice';
 
 const Header = () => {
   const { userInfo } = useAppSelector((state) => state.login);

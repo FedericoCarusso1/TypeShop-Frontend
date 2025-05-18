@@ -25,8 +25,8 @@ const HomePage = () => {
           <Loader />
         ) : (
           <Row md={3} xs={1} lg={3}>
-            {products.map((product) => (
-              <Col key={product._id}>
+            {products && products?.map((product) => (
+              <Col key={product.id}>
                 <ProductCard product={product} />
               </Col>
             ))}

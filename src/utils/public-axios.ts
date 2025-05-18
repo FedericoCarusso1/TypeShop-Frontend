@@ -5,4 +5,6 @@ const publicAxios = axios.create({
   baseURL: `${baseUrl}/`,
 });
 
+
+
 export default publicAxios;

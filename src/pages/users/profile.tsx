@@ -80,20 +80,27 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    dispatch(getUserBydId(id));
+    dispatch(getUserBydId());
     dispatch(getUserOrder());
   }, [dispatch, id, refresh]);
 
   const cols = ['Order id', 'Price', 'Address', 'Paid', 'Date', 'Options'];
 
   return (
-    <DefaultLayout title={`${user?.name?.firstName} profile`}>
-      <Container>
+    // <DefaultLayout title={`${user?.name?.firstName} profile`}>
+    <DefaultLayout title={`${user?.name} profile`}>
+      {/* <Container>
         {loading || !user || orderLoading || !orders ? (
           <Loader />
         ) : (
+          <Row> */}
+
+      <Container>
+        {loading || !user ? (
+          <Loader />
+        ) : (
           <Row>
-            
+
             <Col lg={4} md={5} xs={12}>
               <h2>User Profile</h2>
               <Card>
@@ -103,7 +110,7 @@ const Profile = () => {
                       <Form.Label>Username</Form.Label>
                       <Form.Control
                         {...register('name', {
-                          value: user?.name,
+                          value: user?.username,
                         })}
                         placeholder='Enter name'
                         className={errors.name?.message && 'is-invalid'}
@@ -167,7 +174,7 @@ const Profile = () => {
             </Col>
             <Col md={7} lg={8}>
               <TableContainer cols={cols}>
-                {orders.map((order) => (
+                {orders && orders?.map((order) => (
                   <tr key={order.id}>
                     <td>{order.id}</td>
 

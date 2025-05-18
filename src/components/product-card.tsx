@@ -8,7 +8,8 @@ export type Product = {
   id: number | string;
   title: string;
   price: number;
-  image: string;
+  _images: { [key: string]: string }[];
+  url: string;
   category: string;
   brand: string;
   description: string;
@@ -25,6 +26,7 @@ type Props = {
 };
 
 const ProductCard = ({ product }: Props) => {
+  console.log(product);
   return (
     <Card className="h-100 border border-dark-subtle my-2">
       <Link to={`/products/${product.id}`} className="text-decoration-none text-dark">
@@ -32,19 +34,19 @@ const ProductCard = ({ product }: Props) => {
           style={{
             position: "relative",
             backgroundColor: "#f8f9fa",
-            padding: 0, // ✅ Eliminamos padding que rompía el grid
-            display: "flex", // ✅ Centramos la imagen
+            padding: 0,
+            display: "flex",
             justifyContent: "center",
             alignItems: "center",
           }}
         >
           <ImageLazy
-            imageUrl={product.image}
+            imageUrl={product?._images[0]?.url}
             className="my-5"
             style={{
               height: "180px",
               width: "100%",
-              objectFit: "contain", // ✅ Cambio a "contain" para que no se corte
+              objectFit: "contain", 
               borderRadius: "8px",
             }}
           />

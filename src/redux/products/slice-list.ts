@@ -38,7 +38,7 @@ export const productListSlice = createSlice({
     });
     builder.addCase(getProducts.fulfilled, (state, action) => {
       state.loading = false;
-      state.products = action.payload;
+      state.products = action.payload?.data?.rows || [];
     });
     builder.addCase(getProducts.rejected, (state) => {
       state.loading = false;
