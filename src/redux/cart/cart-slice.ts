@@ -1,8 +1,10 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Product } from '../../components/product-card';
 import { AddressTypes } from '../../utils/interfaces';
+import { store } from '../index';
+import publicAxios from '../../utils/public-axios';
 
-// Estado del carrito con array de direcciones
+// Tipos
 export interface CartSliceState {
   cartItems: Product[];
   shippingAddress: AddressTypes[];
@@ -13,10 +15,72 @@ const initialState: CartSliceState = {
   shippingAddress: [],
 };
 
+// Respuesta GET: array de direcciones
+interface FetchAddressesResponse {
+  message: string;
+  data: AddressTypes[];
+}
+
+// Respuesta POST: una sola dirección
+interface SaveAddressResponse {
+  message: string;
+  data: AddressTypes;
+}
+
+// Thunk para obtener direcciones
+export const fetchShippingAddresses = createAsyncThunk<
+  AddressTypes[] | null,
+  void
+>(
+  '/cart/fetchShippingAddresses',
+  async () => {
+    const state = store.getState();
+    const token = state?.login?.token;
+
+    if (!token) return null;
+
+    try {
+      const response = await publicAxios.get<FetchAddressesResponse>(
+        '/user/shipping-address',
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      return response.data.data || null;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Network error');
+    }
+  }
+);
+
+// Thunk para guardar dirección
+export const saveAddress = createAsyncThunk<
+  AddressTypes,
+  AddressTypes
+>(
+  '/cart/saveAddress',
+  async (address) => {
+    const state = store.getState();
+    const token = state?.login?.token;
+
+    if (!token) throw new Error('No token');
+
+    try {
+      const response = await publicAxios.post<SaveAddressResponse>(
+        '/user/shipping-address',
+        address,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      return response.data.data;
+    } catch (error: any) {
+      throw new Error(error.response?.data?.message || 'Network error');
+    }
+  }
+);
+
+// Slice
 export const cartSlice = createSlice({
   name: 'cart-items',
   initialState,
-
   reducers: {
     addToCart: (state, action: PayloadAction<Product>) => {
       const product = action.payload;
@@ -41,30 +105,6 @@ export const cartSlice = createSlice({
         state.cartItems = state.cartItems.map(item =>
           item.id === product.id ? { ...product, qty: (item.qty || 1) - 1 } : item
         );
-      }
-    },
-
-    saveAddress: (state, action: PayloadAction<AddressTypes>) => {
-      let newAddress = action.payload;
-
-      // Si no viene con id, generamos uno trucho pero único
-      if (!newAddress.id) {
-        newAddress = {
-          ...newAddress,
-          id: `${Date.now()}-${Math.floor(Math.random() * 1000)}`,
-        };
-      }
-
-      const index = state.shippingAddress.findIndex(addr => addr.id === newAddress.id);
-
-      if (index !== -1) {
-        state.shippingAddress = [
-          ...state.shippingAddress.slice(0, index),
-          newAddress,
-          ...state.shippingAddress.slice(index + 1),
-        ];
-      } else {
-        state.shippingAddress = [...state.shippingAddress, newAddress];
       }
     },
 
@@ -93,12 +133,35 @@ export const cartSlice = createSlice({
       state.shippingAddress = [];
     },
   },
+
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchShippingAddresses.fulfilled, (state, action) => {
+        if (action.payload && action.payload.length > 0) {
+          state.shippingAddress = action.payload;
+        }
+      })
+      .addCase(saveAddress.fulfilled, (state, action) => {
+        const newAddress = action.payload;
+        const index = state.shippingAddress.findIndex(addr => addr.id === newAddress.id);
+
+        if (index !== -1) {
+          state.shippingAddress = [
+            ...state.shippingAddress.slice(0, index),
+            newAddress,
+            ...state.shippingAddress.slice(index + 1),
+          ];
+        } else {
+          state.shippingAddress.push(newAddress);
+        }
+      });
+  },
 });
 
+// Exports
 export const {
   addToCart,
   removeFromCart,
-  saveAddress,
   editAddress,
   removeAddress,
   reset,

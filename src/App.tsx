@@ -18,18 +18,25 @@ import OrderDetails from "./pages/cart/order-details";
 import Products from "./pages/products";
 import AuthProvider from "./utils/auth-provider";
 
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import Loader from "./components/UI/loader";
 import ErrorFallback from "./components/UI/error-fallback";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import EditShippingAddress from "./pages/cart/edit-shipping-address";
+import { useAppDispatch } from "./redux";
+import { fetchShippingAddresses } from "./redux/cart/cart-slice";
 
 const DashboardLayout = lazy(
   () => import("./components/layouts/dashboard-layout")
 );
 
 const App = () => {
+  const dispatch = useAppDispatch()
+  useEffect(function () {
+    dispatch(fetchShippingAddresses())
+  })
+
   return (
     <Router>
       <Routes>

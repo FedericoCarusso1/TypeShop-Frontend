@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Row, Col } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router-dom';
 import FormContainer from '../../components/UI/form-container';
 import { useAppDispatch, useAppSelector } from '../../redux';
@@ -11,17 +11,19 @@ const EditShippingAddress = () => {
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
 
-    const { userInfo } = useAppSelector((state) => state.login); // 🔥 userInfo con ID
+    const { userInfo } = useAppSelector((state) => state.login);
     const shippingAddresses = useAppSelector((state) => state.cart.shippingAddress);
-
     const addressToEdit = shippingAddresses.find((addr) => addr.id === id);
 
     const [formData, setFormData] = useState<AddressTypes>({
         id: '',
-        address: '',
+        street: '',
+        streetNumber: '',
         city: '',
+        state: '',
         postalCode: '',
         country: '',
+        reference: '',
     });
 
     useEffect(() => {
@@ -43,84 +45,120 @@ const EditShippingAddress = () => {
         e.preventDefault();
         if (!addressToEdit) return;
 
-        dispatch(
-            editAddress({
-                id: addressToEdit.id,
-                newAddress: formData,
-            })
-        );
+        dispatch(editAddress({ id: addressToEdit.id, newAddress: formData }));
 
-        // Redirigimos al perfil del usuario con su ID
         if (userInfo?.id) {
             navigate(`/profile/${userInfo.id}`);
         } else {
-            navigate('/profile'); // fallback por si algo falla
+            navigate('/profile');
         }
     };
 
     return (
         <FormContainer meta="edit shipping address" title="Edit Shipping Address">
             <Form onSubmit={onSubmit}>
-                <Form.Group controlId="address">
-                    <Form.Label>Address</Form.Label>
-                    <Form.Control
-                        value={formData.address}
-                        onChange={onChange}
-                        name="address"
-                        placeholder="Enter your address"
-                        required
-                    />
-                </Form.Group>
+                <Row>
+                    <Col md={8}>
+                        <Form.Group controlId="street" className="mb-3">
+                            <Form.Label>Street</Form.Label>
+                            <Form.Control
+                                value={formData.street}
+                                onChange={onChange}
+                                name="street"
+                                placeholder="Avenida Siempre Viva"
+                                required
+                            />
+                        </Form.Group>
+                    </Col>
+                    <Col md={4}>
+                        <Form.Group controlId="streetNumber" className="mb-3">
+                            <Form.Label>Street Number</Form.Label>
+                            <Form.Control
+                                value={formData.streetNumber}
+                                onChange={onChange}
+                                name="streetNumber"
+                                placeholder="742"
+                                required
+                            />
+                        </Form.Group>
+                    </Col>
+                </Row>
 
-                <Form.Group controlId="city">
+                <Form.Group controlId="city" className="mb-3">
                     <Form.Label>City</Form.Label>
                     <Form.Control
                         value={formData.city}
                         onChange={onChange}
                         name="city"
-                        placeholder="Enter your city"
+                        placeholder="Springfield"
                         required
                     />
                 </Form.Group>
 
-                <Form.Group controlId="postalCode">
+                <Form.Group controlId="state" className="mb-3">
+                    <Form.Label>State / Province</Form.Label>
+                    <Form.Control
+                        value={formData.state}
+                        onChange={onChange}
+                        name="state"
+                        placeholder="Provincia de Buenos Aires"
+                        required
+                    />
+                </Form.Group>
+
+                <Form.Group controlId="postalCode" className="mb-3">
                     <Form.Label>Postal Code</Form.Label>
                     <Form.Control
                         value={formData.postalCode}
                         onChange={onChange}
                         name="postalCode"
-                        placeholder="Enter your postal code"
+                        placeholder="1234"
                         required
                     />
                 </Form.Group>
 
-                <Form.Group controlId="country">
+                <Form.Group controlId="country" className="mb-3">
                     <Form.Label>Country</Form.Label>
                     <Form.Control
                         value={formData.country}
                         onChange={onChange}
                         name="country"
-                        placeholder="Enter your country"
+                        placeholder="Argentina"
                         required
                     />
                 </Form.Group>
 
-                <Button
-                    style={{ backgroundColor: '#e03a3c', color: '#fff' }}
-                    variant="outline-none"
-                    type="submit"
-                    className="mt-4 w-full"
-                >
-                    Save Changes
-                </Button>
+                <Form.Group controlId="reference" className="mb-4">
+                    <Form.Label>Reference</Form.Label>
+                    <Form.Control
+                        value={formData.reference}
+                        onChange={onChange}
+                        name="reference"
+                        placeholder="Casa con rejas verdes, al lado del kiosco"
+                    />
+                </Form.Group>
 
-                <Button
-                    variant="secondary"
-                    className="mt-2 w-full"
-                    onClick={() => navigate('/shipping-address')}
-                >
-                    Cancel
-                </Button>
+                <Row className="mt-4">
+                    <Col xs={6}>
+                        <Button
+                            style={{ backgroundColor: '#e03a3c', color: '#fff' }}
+                            variant="outline-none"
+                            type="submit"
+                            className="w-100"
+                        >
+                            Save Changes
+                        </Button>
+                    </Col>
+                    <Col xs={6}>
+                        <Button
+                            variant="secondary"
+                            className="w-100"
+                            onClick={() => navigate('/shipping-address')}
+                        >
+                            Cancel
+                        </Button>
+                    </Col>
+                </Row>
             </Form>
         </FormContainer>
     );

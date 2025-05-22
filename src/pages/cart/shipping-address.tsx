@@ -1,92 +1,155 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Col, Form, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import FormContainer from '../../components/UI/form-container';
-import { useAppDispatch, useAppSelector } from '../../redux';
+import { useAppDispatch } from '../../redux';
 import { saveAddress } from '../../redux/cart/cart-slice';
 import { AddressTypes } from '../../utils/interfaces';
 
 const ShippingAddress = () => {
-  const shippingAddresses = useAppSelector((state) => state.cart.shippingAddress);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState<AddressTypes>({
-    address: '',
+    street: '',
+    streetNumber: '',
     city: '',
+    state: '',
     postalCode: '',
     country: '',
+    reference: '',
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prevState) => ({
-      ...prevState,
+    setFormData((prev) => ({
+      ...prev,
       [e.target.name]: e.target.value,
     }));
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(saveAddress(formData));
-    navigate('/checkout');
+    setLoading(true);
+    setError(null);
+
+    try {
+      await dispatch(saveAddress(formData)).unwrap();
+      navigate('/checkout');
+    } catch (err: any) {
+      setError(err.message || 'Error al guardar la dirección');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  useEffect(() => {
-    if (shippingAddresses?.length > 0) {
-      // opcional: navigate('/checkout');
-    }
-  }, [shippingAddresses, navigate]);
-
   return (
-    <FormContainer meta="shipping address" title="Shipping Address">
+    <FormContainer meta="shipping address" title="Dirección de Envío">
       <Form onSubmit={onSubmit}>
-        <Form.Group controlId="address">
-          <Form.Label>Address</Form.Label>
+        <Row className="mb-3">
+          <Col md={8}>
+            <Form.Group controlId="street">
+              <Form.Label>Calle</Form.Label>
+              <Form.Control
+                name="street"
+                value={formData.street}
+                onChange={onChange}
+                placeholder="Ej: Avenida Siempre Viva"
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md={4}>
+            <Form.Group controlId="streetNumber">
+              <Form.Label>Número</Form.Label>
+              <Form.Control
+                name="streetNumber"
+                value={formData.streetNumber}
+                onChange={onChange}
+                placeholder="Ej: 742"
+                required
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="city">
+              <Form.Label>Ciudad</Form.Label>
+              <Form.Control
+                name="city"
+                value={formData.city}
+                onChange={onChange}
+                placeholder="Ej: Springfield"
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="state">
+              <Form.Label>Provincia / Estado</Form.Label>
+              <Form.Control
+                name="state"
+                value={formData.state}
+                onChange={onChange}
+                placeholder="Ej: Provincia de Buenos Aires"
+                required
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Row className="mb-3">
+          <Col md={6}>
+            <Form.Group controlId="postalCode">
+              <Form.Label>Código Postal</Form.Label>
+              <Form.Control
+                name="postalCode"
+                value={formData.postalCode}
+                onChange={onChange}
+                placeholder="Ej: 1234"
+                required
+              />
+            </Form.Group>
+          </Col>
+          <Col md={6}>
+            <Form.Group controlId="country">
+              <Form.Label>País</Form.Label>
+              <Form.Control
+                name="country"
+                value={formData.country}
+                onChange={onChange}
+                placeholder="Ej: Argentina"
+                required
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+
+        <Form.Group controlId="reference" className="mb-3">
+          <Form.Label>Referencia</Form.Label>
           <Form.Control
-            value={formData.address}
+            name="reference"
+            value={formData.reference}
             onChange={onChange}
-            name="address"
-            placeholder="Enter your address"
-            required
+            placeholder="Ej: Casa con rejas verdes, al lado del kiosco"
+            as="textarea"
+            rows={2}
           />
         </Form.Group>
-        <Form.Group controlId="city">
-          <Form.Label>City</Form.Label>
-          <Form.Control
-            value={formData.city}
-            onChange={onChange}
-            name="city"
-            placeholder="Enter your city"
-            required
-          />
-        </Form.Group>
-        <Form.Group controlId="postalCode">
-          <Form.Label>Postal Code</Form.Label>
-          <Form.Control
-            value={formData.postalCode}
-            onChange={onChange}
-            name="postalCode"
-            placeholder="Enter your postal code"
-            required
-          />
-        </Form.Group>
-        <Form.Group controlId="country">
-          <Form.Label>Country</Form.Label>
-          <Form.Control
-            value={formData.country}
-            onChange={onChange}
-            name="country"
-            placeholder="Enter your country"
-            required
-          />
-        </Form.Group>
+
+        {error && <p className="text-danger">{error}</p>}
+
         <Button
           style={{ backgroundColor: '#e03a3c', color: '#fff' }}
-          variant="outline-none"
           type="submit"
-          className="mt-4 w-full"
+          className="w-100"
+          disabled={loading}
         >
-          Submit
+          {loading ? 'Guardando...' : 'Guardar Dirección'}
         </Button>
       </Form>
     </FormContainer>

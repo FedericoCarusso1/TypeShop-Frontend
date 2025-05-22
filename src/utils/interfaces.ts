@@ -36,10 +36,13 @@ export type User = {
 
 export type AddressTypes = {
   id: string;
-  address: string;
+  street: string;
+  streetNumber: string;
   city: string;
+  state: string;
   postalCode: string;
   country: string;
+  reference?: string; // opcional
 };
 
 
