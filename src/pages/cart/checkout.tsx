@@ -61,16 +61,16 @@ const Checkout = () => {
                   </ListGroup.Item>
                   <h3 className="my-3">Items</h3>
                   {cartItems.map((item) => (
-                    <ListGroup.Item key={item._id} className=" mb-2">
+                    <ListGroup.Item key={item.id} className=" mb-2">
                       <Row className="d-flex align-items-center">
                         <Col md={2}>
                           <ImageLazy
-                            imageUrl={item.image}
+                            imageUrl={item._images[0].url}
                             style={{ objectFit: "contain" }}
                             className="avatar rounded-5"
                           />
                         </Col>
-                        <Col md={6}>{item.name}</Col>
+                        <Col md={6}>{item.title}</Col>
                         <Col>{item?.qty}</Col>
 
                         <Col>{formatCurrencry(item.price * item.qty)}</Col>

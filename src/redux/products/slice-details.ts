@@ -19,7 +19,6 @@ export const getProductById = createAsyncThunk(
   async (id: string | undefined) => {
     try {
       const res = await publicAxios.get(`/products/${id}`);
-      console.log(res)
       if (res.data) {
         return res.data;
       }
@@ -38,7 +37,8 @@ export const productDetailsSlice = createSlice({
     });
     builder.addCase(getProductById.fulfilled, (state, action) => {
       state.loading = false;
-      state.product = action.payload;
+      state.product = action.payload?.data;
+      console.log(action.payload);
     });
     builder.addCase(
       getProductById.rejected,

@@ -74,7 +74,7 @@ const ProductDetails = () => {
               <Card className="shadow">
                 <div className="d-flex justify-content-center">
                   <ImageLazy
-                    imageUrl={product?.image}
+                    imageUrl={product?._images[0]?.url}
                     style={{
                       width: "500px",
                       height: "480px",
@@ -104,7 +104,7 @@ const ProductDetails = () => {
                 <ListGroup.Item>
                   <h5 className=" d-flex justify-content-between align-items-center">
                     <span>Category:</span>
-                    <span>{product.category}</span>
+                    <span>{`${product._category[0].name}`}</span>
                   </h5>
                 </ListGroup.Item>
                 <ListGroup.Item>

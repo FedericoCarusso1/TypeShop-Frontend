@@ -71,25 +71,25 @@ function ProductTable() {
             </Button>
           </h3>
           <TableContainer cols={cols}>
-            {products.map((product) => (
-              <tr key={product._id}>
+            {products && products?.map((product) => (
+              <tr key={product.id}>
                 <td>
-                  <Image className='avatar' roundedCircle src={product.image} />
+                  <Image className='avatar' roundedCircle src={product._images[0].url} />
                 </td>
-                <td>{product.name}</td>
+                <td>{product.title}</td>
                 <td>{product.brand}</td>
-                <td>{product.category}</td>
+                <td>{product._category[0].name}</td>
                 <td>{formatCurrencry(product.price)}</td>
                 <td>{getDate(product?.createdAt)}</td>
                 <td>
                   <Link
                     className='btn btn-sm btn-primary me-2'
-                    to={`/dashboard/product-edit/${product._id}`}
+                    to={`/dashboard/product-edit/${product.id}`}
                   >
                     <FaEdit />
                   </Link>
                   <Button
-                    onClick={() => onDelete(product._id)}
+                    onClick={() => onDelete(product.id)}
                     variant='danger'
                     size='sm'
                   >

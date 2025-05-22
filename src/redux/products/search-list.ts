@@ -36,6 +36,7 @@ export const getFilterProducts = createAsyncThunk(
       const { data } = await publicAxios.get(
         `/products`
       );
+      console.log(data)
       return data;
     } catch (error: any) {
       const message = setError(error);
@@ -54,7 +55,8 @@ export const productFilterSlice = createSlice({
     });
     builder.addCase(getFilterProducts.fulfilled, (state, action) => {
       state.loading = false;
-      state.products = action.payload;
+      
+      state.products = action.payload.data.rows || [];
       state.page = action.payload.page;
       state.pages = action.payload.pages;
       state.brands = action.payload.brands;

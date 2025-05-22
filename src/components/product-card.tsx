@@ -10,7 +10,7 @@ export type Product = {
   price: number;
   _images: { [key: string]: string }[];
   url: string;
-  category: string;
+  _category: { name: string; id: string }[];
   brand: string;
   description: string;
   qty: number;
@@ -20,16 +20,15 @@ export type Product = {
 
 const isNew = () => Math.random() < 0.5;
 
-
 type Props = {
   product: Product;
 };
 
 const ProductCard = ({ product }: Props) => {
-  console.log(product);
   return (
     <Card className="h-100 border border-dark-subtle my-2">
       <Link to={`/products/${product.id}`} className="text-decoration-none text-dark">
+        {/* Imagen */}
         <div
           style={{
             position: "relative",
@@ -46,31 +45,50 @@ const ProductCard = ({ product }: Props) => {
             style={{
               height: "180px",
               width: "100%",
-              objectFit: "contain", 
+              objectFit: "contain",
               borderRadius: "8px",
             }}
           />
-          {isNew() && <Badge
-            bg="warning"
-            text="dark"
-            style={{
-              position: "absolute",
-              top: "10px",
-              left: "10px",
-            }}
-          >
-            Nuevo
-          </Badge>}
+          {isNew() && (
+            <Badge
+              bg="warning"
+              text="dark"
+              style={{
+                position: "absolute",
+                top: "10px",
+                left: "10px",
+              }}
+            >
+              Nuevo
+            </Badge>
+          )}
         </div>
 
-        <Card.Body>
-          <Card.Title className="fs-6 fw-bold text-uppercase text-truncate">
+        {/* Contenido */}
+        <Card.Body className="d-flex flex-column justify-content-between" style={{ minHeight: "150px" }}>
+          <Card.Title className="fs-6 fw-bold text-uppercase text-truncate mb-1">
             {product.title}
           </Card.Title>
-          <Card.Text className="fw-bold fs-5 text-success">
+
+          <div className="d-flex align-items-center" style={{ minHeight: "40px" }}>
+            <Card.Text
+              className="text-muted small text-truncate mb-0"
+              style={{
+                overflow: "hidden",
+                textAlign: "start",
+              }}
+              title={product.description}
+            >
+              {product.description}
+            </Card.Text>
+          </div>
+
+          <Card.Text className="fw-bold fs-5 text-success mt-1">
             {formatCurrencry(product.price)}
           </Card.Text>
         </Card.Body>
+
+
       </Link>
     </Card>
   );

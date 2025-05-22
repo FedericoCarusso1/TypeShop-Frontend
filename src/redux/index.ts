@@ -15,14 +15,18 @@ import orderDetailSlice from './orders/order-details';
 import productFilterSlice from './products/search-list';
 
 const reducers = combineReducers({
+  
   productList: productListSlice.reducer,
   cart: cartSlice.reducer,
   productDetail: productDetailsSlice.reducer,
   productFilter: productFilterSlice.reducer,
+  
   //auth
+
   login: loginSlice.reducer,
   userDetails: userDetailsSlice.reducer,
   userList: userListSlice.reducer,
+
   //orders
   orders: orderListSlice.reducer,
   userOrder: userOrderSlice.reducer,
