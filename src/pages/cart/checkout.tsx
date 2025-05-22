@@ -37,7 +37,7 @@ const Checkout = () => {
       .then((res) => {
         toast.success("your order has been created");
         dispatch(reset());
-        navigate(`/orders/${res.data._id}`);
+        navigate(`/orders/${res.data.id}`);
       })
       .catch((err) => toast.error(setError(err)));
   };

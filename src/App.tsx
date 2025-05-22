@@ -23,6 +23,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import Loader from "./components/UI/loader";
 import ErrorFallback from "./components/UI/error-fallback";
 import "react-lazy-load-image-component/src/effects/blur.css";
+import EditShippingAddress from "./pages/cart/edit-shipping-address";
 
 const DashboardLayout = lazy(
   () => import("./components/layouts/dashboard-layout")
@@ -43,6 +44,15 @@ const App = () => {
           element={
             <AuthProvider>
               <ShippingAddress />
+            </AuthProvider>
+          }
+        />
+
+        <Route
+          path="/shipping-address/edit/:id"
+          element={
+            <AuthProvider>
+              <EditShippingAddress />
             </AuthProvider>
           }
         />

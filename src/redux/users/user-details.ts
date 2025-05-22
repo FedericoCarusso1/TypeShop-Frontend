@@ -36,7 +36,6 @@ export const getUserBydId = createAsyncThunk(
         return res.data;
       }
     } catch (error) {
-      console.log(error);
       return null;
     }
   }
@@ -56,7 +55,6 @@ export const userDetailsSlice = createSlice({
       console.log('fulfilled')
       state.loading = false;
       state.user = action.payload?.data;
-      console.log(action.payload?.data);
     });
     builder.addCase(getUserBydId.rejected, (state) => {
       console.log('rejected')

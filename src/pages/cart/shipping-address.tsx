@@ -7,10 +7,10 @@ import { saveAddress } from '../../redux/cart/cart-slice';
 import { AddressTypes } from '../../utils/interfaces';
 
 const ShippingAddress = () => {
-  const { shippingAddress } = useAppSelector((state) => state.cart);
+  const shippingAddresses = useAppSelector((state) => state.cart.shippingAddress);
   const dispatch = useAppDispatch();
-
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState<AddressTypes>({
     address: '',
     city: '',
@@ -27,65 +27,64 @@ const ShippingAddress = () => {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    dispatch(
-      saveAddress({
-        address: formData.address,
-        city: formData.city,
-        postalCode: formData.postalCode,
-        country: formData.country,
-      })
-    );
+    dispatch(saveAddress(formData));
     navigate('/checkout');
   };
 
   useEffect(() => {
-    if (shippingAddress) return navigate('/checkout');
-  }, [shippingAddress]);
+    if (shippingAddresses?.length > 0) {
+      // opcional: navigate('/checkout');
+    }
+  }, [shippingAddresses, navigate]);
 
   return (
-    <FormContainer meta='shipping address' title='Shipping Address'>
+    <FormContainer meta="shipping address" title="Shipping Address">
       <Form onSubmit={onSubmit}>
-        <Form.Group controlId='address'>
+        <Form.Group controlId="address">
           <Form.Label>Address</Form.Label>
           <Form.Control
+            value={formData.address}
             onChange={onChange}
-            name='address'
-            placeholder='enter your address'
+            name="address"
+            placeholder="Enter your address"
             required
           />
         </Form.Group>
-        <Form.Group controlId='city'>
+        <Form.Group controlId="city">
           <Form.Label>City</Form.Label>
           <Form.Control
+            value={formData.city}
             onChange={onChange}
-            name='city'
-            placeholder='enter your city'
+            name="city"
+            placeholder="Enter your city"
             required
           />
         </Form.Group>
-        <Form.Group controlId='postalCode'>
+        <Form.Group controlId="postalCode">
           <Form.Label>Postal Code</Form.Label>
           <Form.Control
+            value={formData.postalCode}
             onChange={onChange}
-            name='postalCode'
-            placeholder='enter your postal code'
+            name="postalCode"
+            placeholder="Enter your postal code"
             required
           />
         </Form.Group>
-        <Form.Group controlId='country'>
+        <Form.Group controlId="country">
           <Form.Label>Country</Form.Label>
           <Form.Control
+            value={formData.country}
             onChange={onChange}
-            name='country'
-            placeholder='enter your country'
+            name="country"
+            placeholder="Enter your country"
             required
           />
         </Form.Group>
         <Button
           style={{ backgroundColor: '#e03a3c', color: '#fff' }}
-          variant='outline-none'
-          type='submit'
-          className='mt-4 w-full'
+          variant="outline-none"
+          type="submit"
+          className="mt-4 w-full"
         >
           Submit
         </Button>

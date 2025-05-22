@@ -39,18 +39,18 @@ const CartPage = () => {
               <ListGroup variant="flush">
                 {cartItems.map((item) => (
                   <ListGroup.Item
-                    key={item._id}
+                    key={item.id}
                     className="shadow rounded p-5 bg-white mb-2"
                   >
                     <Row className="d-flex align-items-center">
                       <Col md={2}>
                         <ImageLazy
-                          imageUrl={item.image}
+                          imageUrl={item._images[0].url}
                           style={{ objectFit: "contain" }}
                           className="h-16 w-16 rounded-5"
                         />
                       </Col>
-                      <Col className="d-none d-lg-block">{item.name}</Col>
+                      <Col className="d-none d-lg-block">{item.title}</Col>
                       <Col>{item?.qty}</Col>
 
                       <Col>{formatCurrencry(item.price * item.qty)}</Col>

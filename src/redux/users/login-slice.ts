@@ -44,7 +44,6 @@ export const userLogin = createAsyncThunk(
         return res.data;
       }
     } catch (error: any) {
-      console.log(error)
       const message = setError(error);
       toast.error(message);
       thunkAPI.rejectWithValue(message);
@@ -82,9 +81,7 @@ export const loginSlice = createSlice({
       state.loading = true;
     });
     builder.addCase(userLogin.fulfilled, (state, action) => {
-      console.log(state, action)
       state.loading = false;
-      console.log(action.payload)
       state.userInfo = action.payload?.data.userInfo;
       state.token = action.payload?.data.token;
     });
