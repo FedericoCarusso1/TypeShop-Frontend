@@ -35,7 +35,7 @@ const App = () => {
   const dispatch = useAppDispatch()
   useEffect(function () {
     dispatch(fetchShippingAddresses())
-  })
+  }, [dispatch, fetchShippingAddresses])
 
   return (
     <Router>
