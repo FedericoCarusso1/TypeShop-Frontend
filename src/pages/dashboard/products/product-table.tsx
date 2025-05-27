@@ -76,7 +76,7 @@ function ProductTable() {
             {products && products?.map((product) => (
               <tr key={product.id}>
                 <td>
-                  <Image className='avatar' roundedCircle src={product._images[0].url} />
+                  <Image className='avatar' roundedCircle src={product._images[0]?.url} />
                 </td>
                 <td>{product.title}</td>
                 <td>{product.brand}</td>
