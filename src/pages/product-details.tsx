@@ -102,11 +102,20 @@ const ProductDetails = () => {
                 </ListGroup.Item>
 
                 <ListGroup.Item>
-                  <h5 className=" d-flex justify-content-between align-items-center">
-                    <span>Category:</span>
-                    <span>{`${product._category[0].name}`}</span>
-                  </h5>
+                  <h5>Categories:</h5>
+                  <div className="d-flex flex-wrap gap-2 mt-2">
+                    {product._category.map((cat, index) => (
+                      <span
+                        key={cat.id}
+                        className={`badge bg-dark px-3 py-2 fs-6 ${index !== 0 ? "mx-1" : ""}`}
+                      >
+                        {cat.name}
+                      </span>
+                    ))}
+                  </div>
                 </ListGroup.Item>
+
+
                 <ListGroup.Item>
                   <h5 className=" d-flex justify-content-between align-items-center">
                     <span>Brand:</span>

@@ -25,7 +25,7 @@ import ErrorFallback from "./components/UI/error-fallback";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import EditShippingAddress from "./pages/cart/edit-shipping-address";
 import { useAppDispatch } from "./redux";
-import { fetchShippingAddresses } from "./redux/cart/cart-slice";
+import { getShippingAddress } from "./redux/cart/cart-slice";
 
 const DashboardLayout = lazy(
   () => import("./components/layouts/dashboard-layout")
@@ -34,8 +34,8 @@ const DashboardLayout = lazy(
 const App = () => {
   const dispatch = useAppDispatch()
   useEffect(function () {
-    dispatch(fetchShippingAddresses())
-  }, [dispatch, fetchShippingAddresses])
+    dispatch(getShippingAddress())
+  }, [dispatch, getShippingAddress])
 
   return (
     <Router>

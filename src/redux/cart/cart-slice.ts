@@ -4,7 +4,7 @@ import { AddressTypes } from '../../utils/interfaces';
 import { store } from '../index';
 import publicAxios from '../../utils/public-axios';
 
-// Tipos
+// Estado inicial
 export interface CartSliceState {
   cartItems: Product[];
   shippingAddress: AddressTypes[];
@@ -15,71 +15,69 @@ const initialState: CartSliceState = {
   shippingAddress: [],
 };
 
-// Respuesta GET: array de direcciones
+// Respuesta GET
 interface FetchAddressesResponse {
   message: string;
-  data: AddressTypes[];
+  data: {
+    shippingAddress: AddressTypes[]; // debe coincidir con la estructura real de la respuesta
+  }
 }
 
-// Respuesta POST: una sola dirección
+// Respuesta POST
 interface SaveAddressResponse {
   message: string;
   data: AddressTypes;
 }
 
 // Thunk para obtener direcciones
-export const fetchShippingAddresses = createAsyncThunk<
-  AddressTypes[] | null,
-  void
->(
-  '/cart/fetchShippingAddresses',
-  async () => {
-    const state = store.getState();
-    const token = state?.login?.token;
+export const getShippingAddress = createAsyncThunk<
+  AddressTypes[] | null
+>('cart/getShippingAddress', async () => {
+  const token = store.getState()?.login?.token;
+  if (!token) return null;
 
-    if (!token) return null;
+  try {
+    const response = await publicAxios.get<FetchAddressesResponse>(
+      '/user/shipping-address',
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
 
-    try {
-      const response = await publicAxios.get<FetchAddressesResponse>(
-        '/user/shipping-address',
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      return response.data.data || null;
-    } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Network error');
-    }
+    console.log(response.data.data.shippingAddress);
+
+    return response.data?.data?.shippingAddress || [];
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Error al obtener direcciones');
   }
-);
+});
 
-// Thunk para guardar dirección
-export const saveAddress = createAsyncThunk<
-  AddressTypes,
-  AddressTypes
->(
-  '/cart/saveAddress',
+// Thunk para guardar una dirección
+export const saveAddress = createAsyncThunk<AddressTypes, AddressTypes>(
+  'cart/saveAddress',
   async (address) => {
-    const state = store.getState();
-    const token = state?.login?.token;
-
-    if (!token) throw new Error('No token');
+    const token = store.getState()?.login?.token;
+    if (!token) throw new Error('No se encontró el token');
 
     try {
       const response = await publicAxios.post<SaveAddressResponse>(
         '/user/shipping-address',
         address,
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
 
       return response.data.data;
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Network error');
+      throw new Error(error.response?.data?.message || 'Error al guardar dirección');
     }
   }
 );
 
 // Slice
 export const cartSlice = createSlice({
-  name: 'cart-items',
+  name: 'cart',
   initialState,
   reducers: {
     addToCart: (state, action: PayloadAction<Product>) => {
@@ -88,7 +86,7 @@ export const cartSlice = createSlice({
 
       if (exist) {
         state.cartItems = state.cartItems.map(item =>
-          item.id === product.id ? { ...product, qty: (item.qty || 1) + 1 } : item
+          item.id === product.id ? { ...item, qty: (item.qty || 1) + 1 } : item
         );
       } else {
         state.cartItems.push({ ...product, qty: 1 });
@@ -103,7 +101,7 @@ export const cartSlice = createSlice({
         state.cartItems = state.cartItems.filter(item => item.id !== product.id);
       } else {
         state.cartItems = state.cartItems.map(item =>
-          item.id === product.id ? { ...product, qty: (item.qty || 1) - 1 } : item
+          item.id === product.id ? { ...item, qty: (item.qty || 1) - 1 } : item
         );
       }
     },
@@ -116,11 +114,7 @@ export const cartSlice = createSlice({
       const index = state.shippingAddress.findIndex(addr => addr.id === id);
 
       if (index !== -1) {
-        state.shippingAddress = [
-          ...state.shippingAddress.slice(0, index),
-          newAddress,
-          ...state.shippingAddress.slice(index + 1),
-        ];
+        state.shippingAddress[index] = newAddress;
       }
     },
 
@@ -136,8 +130,8 @@ export const cartSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      .addCase(fetchShippingAddresses.fulfilled, (state, action) => {
-        if (action.payload && action.payload.length > 0) {
+      .addCase(getShippingAddress.fulfilled, (state, action) => {
+        if (action.payload) {
           state.shippingAddress = action.payload;
         }
       })
@@ -146,11 +140,7 @@ export const cartSlice = createSlice({
         const index = state.shippingAddress.findIndex(addr => addr.id === newAddress.id);
 
         if (index !== -1) {
-          state.shippingAddress = [
-            ...state.shippingAddress.slice(0, index),
-            newAddress,
-            ...state.shippingAddress.slice(index + 1),
-          ];
+          state.shippingAddress[index] = newAddress;
         } else {
           state.shippingAddress.push(newAddress);
         }

@@ -16,6 +16,7 @@ import { getUserOrder } from '../../redux/orders/user-orders';
 import { formatCurrencry, getDate } from '../../utils/helper';
 import { FaCheck, FaTimes, FaTrash } from 'react-icons/fa';
 import { GrView } from 'react-icons/gr';
+import { getShippingAddress } from '../../redux/cart/cart-slice';
 
 type FormValues = {
   email: string;
@@ -84,12 +85,13 @@ const Profile = () => {
   useEffect(() => {
     dispatch(getUserBydId());
     dispatch(getUserOrder());
+    dispatch(getShippingAddress());
   }, [dispatch, id, refresh]);
 
   const cols = ['Order id', 'Price', 'Address', 'Paid', 'Date', 'Options'];
 
   return (
-    <DefaultLayout title={`${user?.name} profile`}>
+    <DefaultLayout title={`${user?.username} profile`}>
       <Container className="py-4">
         {loading || !user ? (
           <Loader />
@@ -179,13 +181,16 @@ const Profile = () => {
                       No shipping addresses saved
                     </ListGroup.Item>
                   ) : (
-                    shippingAddress.map((addr, i) => (
+                    shippingAddress && shippingAddress?.length && shippingAddress?.map((addr, i) => (
                       <ListGroup.Item key={i} className="py-3 px-3 d-flex justify-content-between align-items-start">
                         <div>
-                          <div><strong>Address:</strong> {addr.address}</div>
-                          <div><strong>City:</strong> {addr.city}</div>
-                          <div><strong>Postal Code:</strong> {addr.postalCode}</div>
-                          <div><strong>Country:</strong> {addr.country}</div>
+                          <div><strong>Dirección:</strong> {addr.street}{addr.streetNumber ? ` ${addr.streetNumber}` : ''}</div>
+                          <div><strong>Ciudad:</strong> {addr.city}</div>
+                          <div><strong>Provincia/Estado:</strong> {addr.state || 'N/A'}</div>
+                          <div><strong>Código Postal:</strong> {addr.postalCode}</div>
+                          <div><strong>País:</strong> {addr.country || 'N/A'}</div>
+                          {addr.reference && <div><strong>Referencia:</strong> {addr.reference}</div>}
+                          {addr.phoneNumber && <div><strong>Teléfono:</strong> {addr.phoneNumber}</div>}
                         </div>
                         <Button
                           size="sm"

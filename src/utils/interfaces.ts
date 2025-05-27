@@ -34,15 +34,17 @@ export type User = {
   createdAt: Date;
 };
 
-export type AddressTypes = {
+export interface AddressTypes {
   id: string;
   street: string;
-  streetNumber: string;
+  streetNumber?: string; // Este no está en Sequelize, podés removerlo si no lo vas a usar más
   city: string;
-  state: string;
+  state?: string;
   postalCode: string;
-  country: string;
-  reference?: string; // opcional
-};
+  country?: string;
+  phoneNumber?: string;
+  reference?: string;
+}
+
 
 
