@@ -12,6 +12,7 @@ import { getFilterProducts } from '../../../redux/products/search-list';
 import authAxios from '../../../utils/auth-axios';
 import { setError } from '../../../utils/error';
 import { formatCurrencry, getDate } from '../../../utils/helper';
+import { getCategories } from '../../../redux/products/categories-list';
 
 // Then, use it in a component.
 function ProductTable() {
@@ -50,6 +51,7 @@ function ProductTable() {
   };
 
   useEffect(() => {
+    dispatch(getCategories())
     dispatch(getFilterProducts({ n: pageNumber, b: '', c: '', q: '' }));
   }, [dispatch, pageNumber, refresh]);
 

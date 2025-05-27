@@ -6,6 +6,7 @@ import Loader from "../components/UI/loader";
 import { useAppDispatch, useAppSelector } from "../redux";
 import { getProducts } from "../redux/products/slice-list";
 import { trackWindowScroll } from "react-lazy-load-image-component";
+import { getCategories } from "../redux/products/categories-list";
 
 const HomePage = () => {
   const dispatch = useAppDispatch();
@@ -13,6 +14,7 @@ const HomePage = () => {
 
   useEffect(() => {
     dispatch(getProducts());
+    dispatch(getCategories())
   }, [dispatch]);
 
   return (

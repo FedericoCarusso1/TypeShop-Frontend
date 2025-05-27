@@ -111,7 +111,7 @@ const Products = () => {
             <Row style={{ minHeight: "80vh" }}>
               {products &&
                 products.map((product, index) => (
-                  <Col lg={4} md={6} xs={12} key={product._id || index}>
+                  <Col lg={4} md={6} xs={12} key={product.id || index}>
                     <ProductCard product={product} />
                   </Col>
                 ))}

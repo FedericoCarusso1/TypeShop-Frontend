@@ -12,6 +12,7 @@
     "@fortawesome/react-fontawesome": "^0.1.18",
     "@hookform/resolvers": "^2.9.3",
     "@reduxjs/toolkit": "^1.8.2",
+    "@types/react-select": "^5.0.0",
     "@webpixels/css": "^1.1.92",
     "axios": "^0.27.2",
     "react": "^18.0.0",
@@ -26,6 +27,7 @@
     "react-redux": "^8.0.2",
     "react-router-bootstrap": "^0.26.1",
     "react-router-dom": "^6.3.0",
+    "react-select": "^5.10.1",
     "react-stripe-checkout": "^2.6.3",
     "redux-persist": "^6.0.0",
     "yup": "^0.32.11"

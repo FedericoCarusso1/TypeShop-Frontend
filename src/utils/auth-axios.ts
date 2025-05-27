@@ -7,7 +7,7 @@ const authAxios = axios.create({
 
 export const authorizationProvider = (store: any) => {
   authAxios.interceptors.request.use((config: any) => {
-    const token = store.getState().login.userInfo.token;
+    const token = store.getState().login.token;
     config.headers.Authorization = `Bearer ${token}`;
     return config;
   });
