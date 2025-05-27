@@ -7,7 +7,6 @@ import authAxios from '../../utils/auth-axios';
 import toast from 'react-hot-toast';
 import { setError } from '../../utils/error';
 import { ChangeEvent, useState } from 'react';
-import { baseUrl } from '../../utils/helper';
 import Select from 'react-select';
 import { useAppSelector } from '../../redux';
 
@@ -21,7 +20,6 @@ type OptionType = { label: string; value: string };
 
 type FormValues = {
   title: string;
-  image: string[]; // Esto en realidad ya no se usa como array, pero lo dejamos por compatibilidad
   category: OptionType[];
   brand: string;
   price: number;
@@ -29,7 +27,7 @@ type FormValues = {
 };
 
 const ProductModal = ({ show, handleClose, setRefresh }: Props) => {
-  const [image, setImage] = useState<string>('');
+  const [images, setImages] = useState<File[]>([]);
 
   const categoryOptions = useAppSelector((state) =>
     state.categories.categories.map((category) => ({
@@ -59,29 +57,28 @@ const ProductModal = ({ show, handleClose, setRefresh }: Props) => {
     resolver: yupResolver(validationSchema),
   });
 
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
-      const formData = new FormData();
-      formData.append('image', file);
-
-      authAxios.post('/uploads/image', formData).then((res) => {
-        if (res.data) {
-          setImage(`${baseUrl}${res.data}`);
-        }
-      });
-    }
-  };
-
   const onSubmit = (data: FormValues) => {
-    const payload = {
-      ...data,
-      image,
-      category: data.category.map((c) => c.value),
-    };
+    const formData = new FormData();
+
+    formData.append('title', data.title);
+    formData.append('brand', data.brand);
+    formData.append('price', data.price.toString());
+    formData.append('description', data.description);
+
+    // Agregar categorías (como array plano)
+    data.category.forEach((cat) => {
+      formData.append('category', cat.value); // ✅ name sin []
+    });
+
+    // Agregar múltiples imágenes (como array plano)
+    images.forEach((file) => {
+      formData.append('images', file); // ✅ mismo nombre varias veces
+    });
 
     authAxios
-      .post('/products', payload)
+      .post('/products', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
       .then(() => {
         toast.success('Product has been created');
         setRefresh(true);
@@ -95,7 +92,7 @@ const ProductModal = ({ show, handleClose, setRefresh }: Props) => {
 
   return (
     <ModalContainer title="Add Product" handleClose={handleClose} show={show}>
-      <Form onSubmit={handleSubmit(onSubmit)}>
+      <Form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data">
         <Form.Group>
           <Form.Label>Title</Form.Label>
           <Form.Control
@@ -108,8 +105,17 @@ const ProductModal = ({ show, handleClose, setRefresh }: Props) => {
         </Form.Group>
 
         <Form.Group>
-          <Form.Label>Image</Form.Label>
-          <Form.Control type="file" name="image" onChange={onChange} />
+          <Form.Label>Images</Form.Label>
+          <Form.Control
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              if (e.target.files) {
+                setImages(Array.from(e.target.files));
+              }
+            }}
+          />
         </Form.Group>
 
         <Form.Group>
@@ -146,6 +152,7 @@ const ProductModal = ({ show, handleClose, setRefresh }: Props) => {
           <Form.Label>Price</Form.Label>
           <Form.Control
             type="number"
+            step="0.01"
             placeholder="200.00"
             {...register('price')}
             className={errors.price ? 'is-invalid' : ''}
